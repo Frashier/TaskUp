@@ -6,11 +6,24 @@ function App() {
   const usernameInput = useRef(null);
   const passwordInput = useRef(null);
 
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
-
+  const handleLoginClick = () => {
     fetch("http://localhost:3001/login", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: usernameInput.current.value,
+        password: passwordInput.current.value,
+      }),
+    })
+      .then((response) => response.text())
+      .then((response) => setSessionid(response));
+  };
+
+  const handleRegisterClick = () => {
+    fetch("http://localhost:3001/register", {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -26,7 +39,7 @@ function App() {
   if (sessionid == null) {
     return (
       <div className="App">
-        <form onSubmit={handleLoginSubmit}>
+        <form>
           <label for="username">Username:</label>
           <br />
           <input
@@ -45,7 +58,8 @@ function App() {
             name="password"
           />
           <br />
-          <input type="submit" value="Login" />
+          <input type="submit" value="Login" onClick={handleLoginClick} />
+          <input type="submit" value="Register" onClick={handleRegisterClick} />
         </form>
       </div>
     );
