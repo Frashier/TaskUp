@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    index: true,
   },
   password: {
     type: String,
@@ -11,10 +12,8 @@ const userSchema = new mongoose.Schema({
   },
   sessionID: {
     type: String,
-    required: true,
-    default: null,
   },
 });
 const userModel = mongoose.model("User", userSchema);
 
-exports.module = { userModel };
+module.exports = { userModel };

@@ -16,7 +16,18 @@ app.post("/login", (req, res) => {
 });
 
 app.put("/register", (req, res) => {
-  console.log(models.userModel.find({ login: req.body.username }));
+  models.userModel.exists({ username: req.body.username }).then((result) => {
+    if (result) {
+      res.send("User with this username exists");
+    } else {
+      const newUser = new models.userModel({
+        username: req.body.username,
+        password: req.body.password,
+      });
+      newUser.save();
+      res.send("User registered");
+    }
+  });
 });
 
 async function run() {
