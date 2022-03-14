@@ -6,7 +6,8 @@ function App() {
   const usernameInput = useRef(null);
   const passwordInput = useRef(null);
 
-  const handleLoginClick = () => {
+  const handleLoginClick = (event) => {
+    event.preventDefault();
     fetch("http://localhost:3001/login", {
       method: "POST",
       headers: {
@@ -21,7 +22,8 @@ function App() {
       .then((response) => setSessionid(response));
   };
 
-  const handleRegisterClick = () => {
+  const handleRegisterClick = (event) => {
+    event.preventDefault();
     fetch("http://localhost:3001/register", {
       method: "PUT",
       headers: {

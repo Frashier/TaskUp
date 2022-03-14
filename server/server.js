@@ -16,19 +16,19 @@ app.post("/login", (req, res) => {
 });
 
 app.put("/register", (req, res) => {
-  console.log("PUT");
+  console.log(models.userModel.find({ login: req.body.username }));
 });
 
 async function run() {
-  await mongoose
-    .connect("mongodb://localhost:27017/test", {
+  try {
+    mongoose.connect("mongodb://localhost:27017/test", {
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000,
-    })
-    .catch((err) => {
-      console.log("Database connection time out");
-      process.exit();
     });
+  } catch (err) {
+    console.log("Database connection error");
+    process.exit();
+  }
   app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
