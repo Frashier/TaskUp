@@ -8,6 +8,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
+app.use(express.text());
 app.use(express.json());
 
 app.post("/login", (req, res) => {
@@ -36,7 +37,7 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.put("/register", (req, res) => {
+app.post("/register", (req, res) => {
   // Check if this username is used, register if not
   models.User.exists({ username: req.body.username })
     .then((result) => {
@@ -48,13 +49,42 @@ app.put("/register", (req, res) => {
           password: req.body.password,
         });
         newUser.save();
-        res.send("User registered");
+        res.status(200).send();
       }
     })
     .catch((err) => {
+      console.error(err);
       res.status(500).send();
     });
 });
+
+app.post("/add_task", (req, res) => {
+  authenticate(req.header("SessionID")).then((user) => {
+    const task = new models.Task({
+      userID: user._id,
+      description: req.body,
+    });
+    task.save((err, task) => {
+      if (err) {
+        res.status(500).send();
+        return console.error(err);
+      }
+      res.status(200).send();
+    });
+  });
+});
+
+app.get("/tasks", (req, res) => {
+  authenticate(req.header("SessionID")).then((user) => {
+    models.Task.find({ userID: user._id }).then((tasks) => {
+      res.send(JSON.stringify(tasks));
+    });
+  });
+});
+
+async function authenticate(sessionid) {
+  return await models.User.findOne({ sessionID: sessionid });
+}
 
 async function run() {
   // Connect to database
@@ -64,7 +94,7 @@ async function run() {
       serverSelectionTimeoutMS: 5000,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     process.exit();
   }
 
