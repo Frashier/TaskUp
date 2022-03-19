@@ -28,6 +28,15 @@ const taskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    dateCreated: {
+      type: Date,
+      required: true,
+    },
+    done: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   {
     autoCreate: true,

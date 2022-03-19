@@ -1,8 +1,75 @@
 import "./App.css";
 import { useState, useRef, useEffect } from "react";
 
+function Task(props) {
+  const handleDeleteClick = async () => {
+    const response = await fetch("http://localhost:3001/delete_task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        SessionID: props.sessionid,
+      },
+      body: props._id,
+    });
+  };
+
+  const handleDoneClick = async () => {
+    const response = await fetch("http://localhost:3001/complete_task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain",
+        SessionID: props.sessionid,
+      },
+      body: props._id,
+    });
+  };
+
+  const style = props.done ? { color: "green" } : { color: "red" };
+  const buttons = props.done ? (
+    <div>
+      {" "}
+      <button onClick={handleDeleteClick}>Delete</button>
+    </div>
+  ) : (
+    <div>
+      {" "}
+      <button onClick={handleDeleteClick}>Delete</button>{" "}
+      <button onClick={handleDoneClick}>Done</button>
+    </div>
+  );
+
+  return (
+    <div className="Task" style={style}>
+      <h2>{props.description}</h2>
+      <h3>{props.dateCreated}</h3>
+      {buttons}
+    </div>
+  );
+}
+
 function TaskList(props) {
   const [tasks, setTasks] = useState([]);
+  const [message, setMessage] = useState("");
+  const descriptionInput = useRef(null);
+
+  const handleAddClick = async (event) => {
+    event.preventDefault();
+
+    const response = await fetch("http://localhost:3001/add_task", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        SessionID: props.sessionid,
+      },
+      body: JSON.stringify({
+        description: descriptionInput.current.value,
+        dateCreated: Date.now(),
+      }),
+    });
+
+    if (response.ok) descriptionInput.current.value = "";
+    else setMessage("Error while adding task");
+  };
 
   useEffect(async () => {
     const response = await fetch("http://localhost:3001/tasks", {
@@ -14,13 +81,29 @@ function TaskList(props) {
     });
     const tasks = await response.text().then(JSON.parse);
     setTasks(tasks);
-  }, []);
+  }, [tasks]);
 
   return (
     <div>
-      {tasks.map((task) => {
-        return <h2 key={task._id}>{task.description}</h2>;
-      })}
+      <p className="message">{message}</p>
+      <div className="Toolbar">
+        <form>
+          <input
+            type="text"
+            ref={descriptionInput}
+            id="description"
+            name="description"
+          />
+          <input type="submit" value="Add task" onClick={handleAddClick} />
+        </form>
+      </div>
+      <div className="Tasks">
+        {tasks.map((task) => {
+          return (
+            <Task key={task._id} {...task} sessionid={props.sessionid}></Task>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -28,7 +111,6 @@ function TaskList(props) {
 function App() {
   const [sessionid, setSessionid] = useState(null);
   const [message, setMessage] = useState("");
-  const descriptionInput = useRef(null);
   const usernameInput = useRef(null);
   const passwordInput = useRef(null);
 
@@ -70,21 +152,6 @@ function App() {
     }
   };
 
-  const handleAddClick = async (event) => {
-    event.preventDefault();
-
-    const response = await fetch("http://localhost:3001/add_task", {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain",
-        SessionID: sessionid,
-      },
-      body: descriptionInput.current.value,
-    });
-
-    descriptionInput.current.value = "";
-  };
-
   if (sessionid == null) {
     return (
       <div className="App">
@@ -117,17 +184,6 @@ function App() {
 
   return (
     <div className="App">
-      <div className="Toolbar">
-        <form>
-          <input
-            type="text"
-            ref={descriptionInput}
-            id="description"
-            name="description"
-          />
-          <input type="submit" value="Add task" onClick={handleAddClick} />
-        </form>
-      </div>
       <TaskList sessionid={sessionid} />
     </div>
   );

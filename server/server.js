@@ -8,8 +8,8 @@ const app = express();
 const port = 3001;
 
 app.use(cors());
-app.use(express.text());
 app.use(express.json());
+app.use(express.text());
 
 app.post("/login", (req, res) => {
   // Try to login
@@ -59,10 +59,11 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/add_task", (req, res) => {
-  authenticate(req.header("SessionID")).then((user) => {
+  getUser(req.header("SessionID")).then((user) => {
     const task = new models.Task({
       userID: user._id,
-      description: req.body,
+      description: req.body.description,
+      dateCreated: req.body.dateCreated,
     });
     task.save((err, task) => {
       if (err) {
@@ -74,15 +75,44 @@ app.post("/add_task", (req, res) => {
   });
 });
 
+app.post("/delete_task", (req, res) => {
+  getUser(req.header("SessionID")).then((user) => {
+    models.Task.deleteOne({ _id: req.body, userID: user._id })
+      .then(() => {
+        res.status(200).send();
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send();
+      });
+  });
+});
+
+app.post("/complete_task", (req, res) => {
+  getUser(req.header("SessionID")).then((user) => {
+    models.Task.findOneAndUpdate(
+      { _id: req.body, userID: user._id },
+      { done: true }
+    )
+      .then(() => {
+        res.status(200).send();
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send();
+      });
+  });
+});
+
 app.get("/tasks", (req, res) => {
-  authenticate(req.header("SessionID")).then((user) => {
+  getUser(req.header("SessionID")).then((user) => {
     models.Task.find({ userID: user._id }).then((tasks) => {
       res.send(JSON.stringify(tasks));
     });
   });
 });
 
-async function authenticate(sessionid) {
+async function getUser(sessionid) {
   return await models.User.findOne({ sessionID: sessionid });
 }
 
