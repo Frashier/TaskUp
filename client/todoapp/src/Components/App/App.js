@@ -39,7 +39,7 @@ function Task(props) {
   );
 
   return (
-    <div className="Task" style={style}>
+    <div className="task" style={style}>
       <h2>{props.description}</h2>
       <h3>{props.dateCreated}</h3>
       {buttons}
@@ -72,22 +72,25 @@ function TaskList(props) {
   };
 
   useEffect(async () => {
-    const response = await fetch("http://localhost:3001/tasks", {
-      method: "GET",
-      headers: {
-        "Content-Type": "text/plain",
-        SessionID: props.sessionid,
+    const response = await fetch(
+      "http://localhost:3001/tasks",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "text/plain",
+          SessionID: props.sessionid,
+        },
       },
-    });
+      []
+    );
     const tasks = await response.text().then(JSON.parse);
     setTasks(tasks);
   }, [tasks]);
 
   return (
-    <>
-      <p className="Message">{message}</p>
-      <div className="Toolbar">
-        <form>
+    <div className="taskList">
+      <div className="taskList-toolbar">
+        <form className="taskList-toolbar-form">
           <input
             type="text"
             ref={descriptionInput}
@@ -96,15 +99,16 @@ function TaskList(props) {
           />
           <input type="submit" value="Add task" onClick={handleAddClick} />
         </form>
+        <p className="taskList-toolbar-message">{message}</p>
       </div>
-      <div className="Tasks">
+      <div className="taskList-tasks">
         {tasks.map((task) => {
           return (
             <Task key={task._id} {...task} sessionid={props.sessionid}></Task>
           );
         })}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -154,36 +158,44 @@ function App() {
 
   if (sessionid == null) {
     return (
-      <div className="App">
-        <form>
-          <label for="username">Username:</label>
-          <br />
-          <input
-            ref={usernameInput}
-            type="text"
-            id="username"
-            name="username"
-          />
-          <br />
-          <label for="password">Password:</label>
-          <br />
-          <input
-            ref={passwordInput}
-            type="password"
-            id="password"
-            name="password"
-          />
-          <br />
-          <input type="submit" value="Login" onClick={handleLoginClick} />
-          <input type="submit" value="Register" onClick={handleRegisterClick} />
-        </form>
-        <p className="Message">{message}</p>
+      <div className="app">
+        <div className="login">
+          <form className="login-input">
+            <label for="username">Username:</label>
+            <br />
+            <input
+              ref={usernameInput}
+              type="text"
+              id="username"
+              name="username"
+            />
+            <br />
+            <label for="password">Password:</label>
+            <br />
+            <input
+              ref={passwordInput}
+              type="password"
+              id="password"
+              name="password"
+            />
+            <br />
+            <div className="login-input-buttons">
+              <input type="submit" value="Login" onClick={handleLoginClick} />
+              <input
+                type="submit"
+                value="Register"
+                onClick={handleRegisterClick}
+              />
+            </div>
+          </form>
+          <p className="login-message">{message}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="App">
+    <div className="app">
       <TaskList sessionid={sessionid} />
     </div>
   );
