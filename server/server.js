@@ -15,7 +15,7 @@ app.post("/login", (req, res) => {
   // Try to login
   models.User.exists({
     username: req.body.username,
-    password: req.body.password,
+    password: hash(req.body.password),
   }).then((result) => {
     // If input is valid
     if (result) {
@@ -42,11 +42,11 @@ app.post("/register", (req, res) => {
   models.User.exists({ username: req.body.username })
     .then((result) => {
       if (result) {
-        res.send("User with this username exists");
+        res.status(400).send();
       } else {
         const newUser = new models.User({
           username: req.body.username,
-          password: req.body.password,
+          password: hash(req.body.password),
         });
         newUser.save();
         res.status(200).send();
@@ -111,6 +111,10 @@ app.get("/tasks", (req, res) => {
     });
   });
 });
+
+function hash(text) {
+  return crypto.createHash("sha256").update(text).digest("hex");
+}
 
 async function getUser(sessionid) {
   return await models.User.findOne({ sessionID: sessionid });
