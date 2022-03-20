@@ -84,8 +84,8 @@ function TaskList(props) {
   }, [tasks]);
 
   return (
-    <div>
-      <p className="message">{message}</p>
+    <>
+      <p className="Message">{message}</p>
       <div className="Toolbar">
         <form>
           <input
@@ -104,7 +104,7 @@ function TaskList(props) {
           );
         })}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -127,8 +127,8 @@ function App() {
         password: passwordInput.current.value,
       }),
     });
-
-    response.text().then(setSessionid);
+    if (response.ok) response.text().then(setSessionid);
+    else setMessage("Invalid input");
   };
 
   const handleRegisterClick = async (event) => {
@@ -177,7 +177,7 @@ function App() {
           <input type="submit" value="Login" onClick={handleLoginClick} />
           <input type="submit" value="Register" onClick={handleRegisterClick} />
         </form>
-        <p className="message">{message}</p>
+        <p className="Message">{message}</p>
       </div>
     );
   }
