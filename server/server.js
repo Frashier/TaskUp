@@ -42,7 +42,7 @@ app.post("/register", (req, res) => {
   models.User.exists({ username: req.body.username })
     .then((result) => {
       if (result) {
-        res.status(400).send();
+        res.status(400).send("User exists");
       } else {
         const newUser = new models.User({
           username: req.body.username,
