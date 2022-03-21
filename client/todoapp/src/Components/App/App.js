@@ -39,9 +39,9 @@ function Task(props) {
   );
 
   return (
-    <div className="task" style={style}>
+    <div className="taskList-task" style={style}>
       <h2>{props.description}</h2>
-      <h3>{props.dateCreated}</h3>
+      <h3>{new Date(props.dateCreated).toUTCString()}</h3>
       {buttons}
     </div>
   );
