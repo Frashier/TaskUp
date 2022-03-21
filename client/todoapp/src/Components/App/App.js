@@ -24,7 +24,6 @@ function Task(props) {
     });
   };
 
-  const style = props.done ? { color: "green" } : { color: "red" };
   const buttons = props.done ? (
     <div>
       {" "}
@@ -39,7 +38,10 @@ function Task(props) {
   );
 
   return (
-    <div className="taskList-task" style={style}>
+    <div
+      className="taskList-task"
+      style={{ "background-color": props.done ? "#eaf8f2" : "white" }}
+    >
       <h2>{props.description}</h2>
       <h3>{new Date(props.dateCreated).toUTCString()}</h3>
       {buttons}
@@ -93,13 +95,14 @@ function TaskList(props) {
     <div className="taskList">
       <div className="taskList-toolbar">
         <form className="taskList-toolbar-form">
-          <input
-            type="text"
+          <textarea
+            rows="3"
+            cols="30"
             ref={descriptionInput}
             id="description"
             name="description"
           />
-          <input type="submit" value="Add task" onClick={handleAddClick} />
+          <button onClick={handleAddClick}>Add task</button>
         </form>
         <p className="taskList-toolbar-message">{message}</p>
       </div>
@@ -182,12 +185,8 @@ function App() {
             />
             <br />
             <div className="login-input-buttons">
-              <input type="submit" value="Login" onClick={handleLoginClick} />
-              <input
-                type="submit"
-                value="Register"
-                onClick={handleRegisterClick}
-              />
+              <button onClick={handleLoginClick}>Login</button>
+              <button onClick={handleRegisterClick}>Register</button>
             </div>
           </form>
           <p className="login-message">{message}</p>

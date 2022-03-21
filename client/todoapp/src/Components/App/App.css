@@ -20,12 +20,19 @@
 
 .taskList-toolbar {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   gap: 5px;
 }
 
+.taskList-toolbar-form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .taskList-task {
+  transition-duration: 0.4s;
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
@@ -46,13 +53,19 @@
   background-color: white;
   border-radius: 25px;
   padding: 20px;
+  margin-top: 25vh;
+  margin-bottom: 25vh;
 }
 
 .login-input {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .login-input-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
   margin: 10px;
 }

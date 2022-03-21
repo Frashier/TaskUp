@@ -1,7 +1,9 @@
 body {
-  margin: 0;
+  margin: 20px;
   padding: 0;
   width: 100%;
+
+  overflow-x: hidden;
 
   background-color: #aedbcb;
   color: var(--magic_mint);
@@ -10,9 +12,15 @@ body {
 }
 
 button {
+  transition-duration: 0.4s;
   background-color: #eaf8f2;
   color: #71d3ab;
   border-radius: 10px;
   font-size: 25px;
   padding: 5px;
+}
+
+button:hover {
+  color: #eaf8f2;
+  background-color: #71d3ab;
 }
