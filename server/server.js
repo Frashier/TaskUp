@@ -29,10 +29,10 @@ app.post("/login", (req, res) => {
         })
         .catch((err) => {
           console.log(err);
-          res.status(500).send();
+          res.status(500).send("Server error");
         });
     } else {
-      res.status(401).send();
+      res.status(401).send("Invalid input");
     }
   });
 });
@@ -48,13 +48,17 @@ app.post("/register", (req, res) => {
           username: req.body.username,
           password: hash(req.body.password),
         });
-        newUser.save();
-        res.status(200).send();
+        newUser.save((err) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send("Username is too long (max 24 characters)");
+          } else res.status(200).send();
+        });
       }
     })
     .catch((err) => {
       console.error(err);
-      res.status(500).send();
+      res.status(500).send("Server error");
     });
 });
 
@@ -65,9 +69,9 @@ app.post("/add_task", (req, res) => {
       description: req.body.description,
       dateCreated: req.body.dateCreated,
     });
-    task.save((err, task) => {
+    task.save((err) => {
       if (err) {
-        res.status(500).send();
+        res.status(500).send("Error during adding a task");
         return console.error(err);
       }
       res.status(200).send();
@@ -83,7 +87,7 @@ app.post("/delete_task", (req, res) => {
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send("Error during deleting a task");
       });
   });
 });
@@ -99,7 +103,7 @@ app.post("/complete_task", (req, res) => {
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send();
+        res.status(500).send("Error durign completing a task");
       });
   });
 });

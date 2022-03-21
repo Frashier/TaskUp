@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+      maxLength: 24,
     },
     password: {
       type: String,
@@ -27,6 +28,7 @@ const taskSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
+      maxLength: 90,
     },
     dateCreated: {
       type: Date,

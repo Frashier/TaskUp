@@ -67,8 +67,10 @@ function TaskList(props) {
       }),
     });
 
-    if (response.ok) descriptionInput.current.value = "";
-    else setMessage("Error while adding task");
+    if (response.ok) {
+      descriptionInput.current.value = "";
+      setMessage("Task added");
+    } else setMessage(await response.text());
   };
 
   useEffect(async () => {
@@ -132,7 +134,7 @@ function App() {
       }),
     });
     if (response.ok) response.text().then(setSessionid);
-    else setMessage("Invalid input");
+    else setMessage(await response.text());
   };
 
   const handleRegisterClick = async (event) => {
@@ -152,7 +154,7 @@ function App() {
     if (response.ok) {
       setMessage("User registered");
     } else {
-      setMessage("Error registering an user");
+      setMessage(await response.text());
     }
   };
 
