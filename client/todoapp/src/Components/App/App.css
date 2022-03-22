@@ -38,8 +38,18 @@
 
 .taskList-toolbar-form {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  background-color: white;
+  padding: 10px;
+  border-radius: 25px;
+}
+
+.taskList-toolbar-form > input {
+  border: none;
+  resize: none;
+  border-radius: 25px;
+  padding: 10px;
+  background-color: white;
 }
 
 .taskList-toolbar-message {

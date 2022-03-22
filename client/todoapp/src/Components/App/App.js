@@ -114,14 +114,13 @@ function TaskList(props) {
     <div className="taskList">
       <div className="taskList-toolbar">
         <form className="taskList-toolbar-form">
-          <textarea
-            rows="3"
-            cols="30"
+          <input
+            type="text"
             ref={descriptionInput}
             id="description"
             name="description"
           />
-          <button onClick={handleAddClick}>Add task</button>
+          <button onClick={handleAddClick}>+</button>
         </form>
         <p className="taskList-toolbar-message">{message}</p>
       </div>
