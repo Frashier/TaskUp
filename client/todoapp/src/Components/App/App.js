@@ -1,7 +1,10 @@
 import "./App.css";
+import "./Checkbox.css";
 import { useState, useRef, useEffect } from "react";
 
 function Task(props) {
+  const [checked, setChecked] = useState(props.done);
+
   const handleDeleteClick = async () => {
     const response = await fetch("http://localhost:3001/delete_task", {
       method: "POST",
@@ -13,38 +16,52 @@ function Task(props) {
     });
   };
 
-  const handleDoneClick = async () => {
+  const handleCheckboxClick = async () => {
+    const newValue = !checked;
     const response = await fetch("http://localhost:3001/complete_task", {
       method: "POST",
       headers: {
-        "Content-Type": "text/plain",
+        "Content-Type": "application/json",
         SessionID: props.sessionid,
       },
-      body: props._id,
+      body: JSON.stringify({
+        _id: props._id,
+        done: newValue,
+      }),
     });
+    setChecked(newValue);
+  };
+  const dateOptions = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
   };
 
-  const buttons = props.done ? (
-    <div>
-      {" "}
-      <button onClick={handleDeleteClick}>Delete</button>
-    </div>
-  ) : (
-    <div>
-      {" "}
-      <button onClick={handleDeleteClick}>Delete</button>{" "}
-      <button onClick={handleDoneClick}>Done</button>
-    </div>
-  );
-
   return (
-    <div
-      className="taskList-task"
-      style={{ "background-color": props.done ? "#eaf8f2" : "white" }}
-    >
-      <h2>{props.description}</h2>
-      <h3>{new Date(props.dateCreated).toUTCString()}</h3>
-      {buttons}
+    <div className="taskList-task">
+      <div className="taskList-task-header">
+        <h3 style={{ color: "lightgray", marginBottom: "0" }}>Task</h3>
+        <p>
+          {new Date(props.dateCreated).toLocaleDateString("en-US", dateOptions)}
+        </p>
+      </div>
+      <p style={{ fontSize: "30px", marginTop: 0 }}>{props.description}</p>
+      <div className="taskList-task-bottom">
+        <button className="deleteButton" onClick={handleDeleteClick}>
+          Delete
+        </button>
+        <div className="container">
+          <input
+            type="checkbox"
+            id="done"
+            name="done"
+            checked={checked}
+          ></input>
+          <span onClick={handleCheckboxClick} className="checkmark"></span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -87,7 +104,9 @@ function TaskList(props) {
       },
       []
     );
-    const tasks = await response.text().then(JSON.parse);
+    let tasks = await response.text().then(JSON.parse);
+    tasks.sort((a, b) => a.dateCreated < b.dateCreated);
+    tasks.sort((a, b) => a.done > b.done);
     setTasks(tasks);
   }, [tasks]);
 

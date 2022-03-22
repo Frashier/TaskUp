@@ -1,26 +1,29 @@
 body {
+  --primary: #22b07e;
+  --secondary: #eaf9f1;
+  --emphasized: #37ac7d;
+
   margin: 20px;
   padding: 0;
   width: 100%;
 
   overflow-x: hidden;
 
-  background-color: #aedbcb;
-  color: var(--magic_mint);
+  background-color: var(--primary);
 
   font-family: "Montserrat", sans-serif;
 }
 
 button {
   transition-duration: 0.4s;
-  background-color: #eaf8f2;
-  color: #71d3ab;
+  background-color: var(--secondary);
+  color: var(--emphasized);
   border-radius: 10px;
-  font-size: 25px;
+  font-size: 20px;
   padding: 5px;
 }
 
 button:hover {
-  color: #eaf8f2;
-  background-color: #71d3ab;
+  color: var(--secondary);
+  background-color: var(--emphasized);
 }

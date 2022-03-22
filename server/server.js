@@ -95,8 +95,8 @@ app.post("/delete_task", (req, res) => {
 app.post("/complete_task", (req, res) => {
   getUser(req.header("SessionID")).then((user) => {
     models.Task.findOneAndUpdate(
-      { _id: req.body, userID: user._id },
-      { done: true }
+      { _id: req.body._id, userID: user._id },
+      { done: req.body.done }
     )
       .then(() => {
         res.status(200).send();

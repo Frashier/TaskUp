@@ -4,6 +4,17 @@
   align-items: center;
 }
 
+.deleteButton {
+  transition: 0.4s;
+  background-color: #eb6565;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: white;
+  color: #eb6565;
+}
+
 .taskList {
   display: flex;
   flex-direction: column;
@@ -31,20 +42,43 @@
   gap: 5px;
 }
 
+.taskList-toolbar-message {
+  color: var(--secondary);
+}
+
 .taskList-task {
   transition-duration: 0.4s;
   overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  background-color: white;
+  background-color: #ffffff;
   border-radius: 25px;
-  padding: 20px;
-  box-shadow: 10px 10px grey;
+  padding: 15px;
   max-width: 50vw;
 
   overflow-wrap: break-word;
   hyphens: manual;
+}
+
+.taskList-task-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5vw;
+}
+
+.taskList-task-header > p {
+  color: var(--emphasized);
+  font-weight: bold;
+  text-align: center;
+}
+
+.taskList-task-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
 }
 
 .login {
