@@ -16,8 +16,7 @@
 }
 
 .deleteButton:hover {
-  background-color: white;
-  color: #e77e7e;
+  background-color: #eca7a7;
 }
 
 .taskList {

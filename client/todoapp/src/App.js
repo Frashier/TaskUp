@@ -48,9 +48,6 @@ function Task(props) {
       </div>
       <p style={{ fontSize: "30px", marginTop: 0 }}>{props.description}</p>
       <div className="taskList-task-bottom">
-        <button className="deleteButton" onClick={handleDeleteClick}>
-          X
-        </button>
         <label className="container">
           Done
           <input
@@ -61,6 +58,9 @@ function Task(props) {
           ></input>
           <span onClick={handleCheckboxClick} className="checkmark"></span>
         </label>
+        <button className="deleteButton" onClick={handleDeleteClick}>
+          X
+        </button>
       </div>
     </div>
   );
