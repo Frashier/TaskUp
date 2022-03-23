@@ -1,5 +1,4 @@
 import "./App.css";
-import "./Checkbox.css";
 import { useState, useRef, useEffect } from "react";
 
 function Task(props) {
@@ -50,9 +49,10 @@ function Task(props) {
       <p style={{ fontSize: "30px", marginTop: 0 }}>{props.description}</p>
       <div className="taskList-task-bottom">
         <button className="deleteButton" onClick={handleDeleteClick}>
-          Delete
+          X
         </button>
-        <div className="container">
+        <label className="container">
+          Done
           <input
             type="checkbox"
             id="done"
@@ -60,7 +60,7 @@ function Task(props) {
             checked={checked}
           ></input>
           <span onClick={handleCheckboxClick} className="checkmark"></span>
-        </div>
+        </label>
       </div>
     </div>
   );
@@ -119,6 +119,7 @@ function TaskList(props) {
             ref={descriptionInput}
             id="description"
             name="description"
+            placeholder="Add task..."
           />
           <button onClick={handleAddClick}>+</button>
         </form>
